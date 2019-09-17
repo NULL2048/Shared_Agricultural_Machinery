@@ -45,14 +45,16 @@ public class PeasantHouseholdServiceImpl implements PeasantHouseholdService {
 
     @Override
     public Boolean updatePeasantHouseholdInfoService(User user) {
-        logger.debug(user.getId() + "：发起查看个人信息修改请求");
+        logger.debug(user.getId() + "：发起个人信息修改请求");
 
         PeasantHouseholdDao phDao = DaoFactory.getPeasantHouseholdDao(dbc.getConnection());
         PeasantHouseholdVo phVo = phDao.getPeasantHouseholdInfoDao(user);
 
         if (phDao.updatePeasantHouseholdInfoDao(phVo)) {
-
+            logger.debug(user.getId() + "：个人信息修改成功");
+            return true;
         }
-
+        logger.debug(user.getId() + "：个人信息修改失败");
+        return false;
     }
 }

@@ -82,14 +82,39 @@ public class PeasantHouseholdDaoImpl implements PeasantHouseholdDao {
 
     @Override
     public Boolean updatePeasantHouseholdInfoDao(PeasantHouseholdVo phVo) {
+        int flag = 0;
         try {
             String sql = "update peasant_household set name = ?, sex = ?, tel = ?, birthday = ?, address = ?, remark = ? where id = ? and account_type = ?";
             pstmt = conn.prepareStatement(sql);
 
             pstmt.setString(1, phVo.getName());
+            pstmt.setString(2, phVo.getName());
+            pstmt.setString(3, phVo.getTel());
+            pstmt.setDate(4, phVo.getBirthday());
+            pstmt.setString(5, phVo.getAddress());
+            pstmt.setString(6, phVo.getRemark());
+
+            flag = pstmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                pstmt.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                rs.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
+        if (flag > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

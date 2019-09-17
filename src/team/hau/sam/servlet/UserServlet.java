@@ -76,6 +76,12 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
                 HttpSession hs = req.getSession();
                 // 将用户数据存储到session中
                 hs.setAttribute("user", user);
+                // 将用户详细信息存储到session中
+                if ("农户".equals(user.getAccountType())) {
+                    PeasantHouseholdService phS = ServiceFactory.getPeasantHouseholdServiceInstance();
+                    PeasantHouseholdVo phVo = phS.getPeasantHouseholdInfoService(user);
+                    hs.setAttribute("info", phVo);
+                }
                 // 重定向
                 resp.sendRedirect("/sam/main/main.jsp");
             } else {
