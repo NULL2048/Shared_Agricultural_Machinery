@@ -1,5 +1,6 @@
 package team.hau.sam.dao.impl;
 
+import jdk.nashorn.internal.runtime.ECMAException;
 import org.apache.log4j.Logger;
 import team.hau.sam.dao.PeasantHouseholdDao;
 import team.hau.sam.dbc.DatabaseConnection;
@@ -29,7 +30,6 @@ public class PeasantHouseholdDaoImpl implements PeasantHouseholdDao {
             pstmt.setString(1, newPwd);
             pstmt.setInt(2, user.getId());
             flag = pstmt.executeUpdate();
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -78,5 +78,18 @@ public class PeasantHouseholdDaoImpl implements PeasantHouseholdDao {
             }
         }
         return ph;
+    }
+
+    @Override
+    public Boolean updatePeasantHouseholdInfoDao(PeasantHouseholdVo phVo) {
+        try {
+            String sql = "update peasant_household set name = ?, sex = ?, tel = ?, birthday = ?, address = ?, remark = ? where id = ? and account_type = ?";
+            pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, phVo.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

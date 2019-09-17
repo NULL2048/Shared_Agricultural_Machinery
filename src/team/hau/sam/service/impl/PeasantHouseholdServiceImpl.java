@@ -1,6 +1,8 @@
 package team.hau.sam.service.impl;
 
 import org.apache.log4j.Logger;
+import team.hau.sam.dao.PeasantHouseholdDao;
+import team.hau.sam.dao.impl.PeasantHouseholdDaoImpl;
 import team.hau.sam.dbc.DatabaseConnection;
 import team.hau.sam.factory.DaoFactory;
 import team.hau.sam.pojo.vo.PeasantHouseholdVo;
@@ -39,5 +41,18 @@ public class PeasantHouseholdServiceImpl implements PeasantHouseholdService {
         }
 
         return ph;
+    }
+
+    @Override
+    public Boolean updatePeasantHouseholdInfoService(User user) {
+        logger.debug(user.getId() + "：发起查看个人信息修改请求");
+
+        PeasantHouseholdDao phDao = DaoFactory.getPeasantHouseholdDao(dbc.getConnection());
+        PeasantHouseholdVo phVo = phDao.getPeasantHouseholdInfoDao(user);
+
+        if (phDao.updatePeasantHouseholdInfoDao(phVo)) {
+
+        }
+
     }
 }

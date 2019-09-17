@@ -19,4 +19,11 @@ public interface PeasantHouseholdService {
      * @return
      */
     PeasantHouseholdVo getPeasantHouseholdInfoService(User user);
+
+    /**
+     * 修改农户账号信息
+     * @param user
+     * @return
+     */
+    Boolean updatePeasantHouseholdInfoService(User user);
 }

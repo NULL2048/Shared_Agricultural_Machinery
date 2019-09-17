@@ -13,7 +13,6 @@ public class DaoFactory {
     public static LoginDao getLoginDaoInstance(Connection conn) {
         return new LoginDaoImpl(conn);
     }
-
     public static SignupDao getSignupDaoInstance(Connection conn) {
         return new SignupDaoImpl(conn);
     }
