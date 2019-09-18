@@ -79,7 +79,7 @@
             <span><img src="images/leftico01.png" /></span>管理信息
         </div>
         <ul class="menuson">
-            <li><cite></cite><a href="user" target="rightFrame">修改用户信息</a><i></i></li>
+            <li><cite></cite><a href="user/changeInfo.jsp" target="rightFrame">修改用户信息</a><i></i></li>
 
         </ul>
     </dd>

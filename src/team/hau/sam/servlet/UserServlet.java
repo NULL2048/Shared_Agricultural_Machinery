@@ -35,13 +35,20 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
             out(req, resp);
         } else if ("show".equals(oper)) {
             show(req, resp);
-        }  else if ("pwd".equals(oper)) {
+        } else if ("pwd".equals(oper)) {
             userChangePwd(req, resp);
+        } else if ("changeInfo".equals(oper)) {
+            userChangeInfo(req, resp);
         }
         else {
             logger.warn("没有找到对应的操作符:" + oper);
         }
     }
+
+    private void userChangeInfo(HttpServletRequest req, HttpServletResponse resp) {
+
+    }
+
     // 注册用户
     private void signup(HttpServletRequest req, HttpServletResponse resp) {
         String name = req.getParameter("name");
@@ -53,10 +60,18 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
         String accountType = req.getParameter("accountType");
         System.out.println(name + " " + password + " " + sex + " " + birthday
             + " " + tel + " " + address + " " + accountType);
+        System.out.println("农户".equals(accountType));
 
+        String[] bs=null;
+        if(birthday!=""){
+            bs=birthday.split("/");
+            birthday=bs[2]+"-"+bs[0]+"-"+bs[1];
+        }
         if ("农户".equals(accountType)) {
+            System.out.println("B");
             PeasantHouseholdVo phVo = new PeasantHouseholdVo(null, password, accountType, sex, tel, name, Date.valueOf(birthday), address, null);
-
+            System.out.println("A");
+            logger.debug("获取注册用户信息：" + phVo.toString());
         }
     }
 
@@ -77,10 +92,16 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
                 // 将用户数据存储到session中
                 hs.setAttribute("user", user);
                 // 将用户详细信息存储到session中
-                if ("农户".equals(user.getAccountType())) {
+                if ("农户".equals(accountType)) {
                     PeasantHouseholdService phS = ServiceFactory.getPeasantHouseholdServiceInstance();
                     PeasantHouseholdVo phVo = phS.getPeasantHouseholdInfoService(user);
                     hs.setAttribute("info", phVo);
+                } else if ("机手".equals(accountType)) {
+
+                } else if ("农机管理部门".equals(accountType)) {
+
+                } else if ("系统管理员".equals(accountType)) {
+
                 }
                 // 重定向
                 resp.sendRedirect("/sam/main/main.jsp");

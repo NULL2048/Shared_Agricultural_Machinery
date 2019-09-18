@@ -7,5 +7,5 @@ public interface SignupService {
      * @param psVo
      * @return
      */
-    Boolean peasantHouseholdSignupService(PeasantHouseholdVo psVo);
+    int peasantHouseholdSignupService(PeasantHouseholdVo psVo);
 }

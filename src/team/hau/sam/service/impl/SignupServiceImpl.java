@@ -1,6 +1,7 @@
 package team.hau.sam.service.impl;
 
 import org.apache.log4j.Logger;
+import team.hau.sam.dao.SignupDao;
 import team.hau.sam.dbc.DatabaseConnection;
 import team.hau.sam.factory.DaoFactory;
 import team.hau.sam.pojo.vo.PeasantHouseholdVo;
@@ -11,13 +12,20 @@ public class SignupServiceImpl implements SignupService {
     DatabaseConnection dbc = new DatabaseConnection();
 
     @Override
-    public Boolean peasantHouseholdSignupService(PeasantHouseholdVo psVo) {
-        boolean flag = (DaoFactory.getSignupDaoInstance(dbc.getConnection())).isExist(psVo.getTel());
+    public int peasantHouseholdSignupService(PeasantHouseholdVo psVo) {
+        SignupDao suD = DaoFactory.getSignupDaoInstance(dbc.getConnection());
+        boolean flag = suD.isPeasantHouseholdExistDao(psVo.getTel());
         if (flag) {
-
+            if (suD.insertPeasantHouseholdDao(psVo)) {
+                dbc.close();
+                return 1;
+            } else {
+                dbc.close();
+                return 0;
+            }
+        } else {
+            dbc.close();
+            return -1;
         }
-
-        dbc.close();
-        return false;
     }
 }
