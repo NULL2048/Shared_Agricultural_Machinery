@@ -6,5 +6,5 @@ import team.hau.sam.pojo.vo.User;
 public interface PeasantHouseholdDao {
     Boolean updatePwdDao(User user, String newPwd);
     PeasantHouseholdVo getPeasantHouseholdInfoDao(User user);
-    Boolean updatePeasantHouseholdInfoDao(PeasantHouseholdVo phVo);
+    Boolean updatePeasantHouseholdInfoDao(PeasantHouseholdVo phVo, User user);
 }

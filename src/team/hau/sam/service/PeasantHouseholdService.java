@@ -23,7 +23,8 @@ public interface PeasantHouseholdService {
     /**
      * 修改农户账号信息
      * @param user
+     * @param phVo
      * @return
      */
-    Boolean updatePeasantHouseholdInfoService(User user);
+    Boolean updatePeasantHouseholdInfoService(User user, PeasantHouseholdVo phVo);
 }

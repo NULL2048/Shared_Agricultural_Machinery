@@ -1,12 +1,8 @@
 package team.hau.sam.dao.impl;
 
-import jdk.nashorn.internal.runtime.ECMAException;
-import org.apache.log4j.Logger;
 import team.hau.sam.dao.PeasantHouseholdDao;
-import team.hau.sam.dbc.DatabaseConnection;
 import team.hau.sam.pojo.vo.PeasantHouseholdVo;
 import team.hau.sam.pojo.vo.User;
-import team.hau.sam.service.PeasantHouseholdService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,18 +77,20 @@ public class PeasantHouseholdDaoImpl implements PeasantHouseholdDao {
     }
 
     @Override
-    public Boolean updatePeasantHouseholdInfoDao(PeasantHouseholdVo phVo) {
+    public Boolean updatePeasantHouseholdInfoDao(PeasantHouseholdVo phVo, User user) {
         int flag = 0;
         try {
             String sql = "update peasant_household set name = ?, sex = ?, tel = ?, birthday = ?, address = ?, remark = ? where id = ? and account_type = ?";
             pstmt = conn.prepareStatement(sql);
 
             pstmt.setString(1, phVo.getName());
-            pstmt.setString(2, phVo.getName());
+            pstmt.setString(2, phVo.getSex());
             pstmt.setString(3, phVo.getTel());
             pstmt.setDate(4, phVo.getBirthday());
             pstmt.setString(5, phVo.getAddress());
             pstmt.setString(6, phVo.getRemark());
+            pstmt.setInt(7, user.getId());
+            pstmt.setString(8, user.getAccountType());
 
             flag = pstmt.executeUpdate();
         } catch (Exception e) {
@@ -100,12 +98,6 @@ public class PeasantHouseholdDaoImpl implements PeasantHouseholdDao {
         } finally {
             try {
                 pstmt.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                rs.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

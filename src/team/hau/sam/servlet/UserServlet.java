@@ -46,7 +46,47 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
     }
 
     private void userChangeInfo(HttpServletRequest req, HttpServletResponse resp) {
+        String name = req.getParameter("name");
+        String sex = req.getParameter("sex");
+        String birthday = req.getParameter("birthday");
+        String tel = req.getParameter("tel");
+        String address = req.getParameter("address");
+        String remark = req.getParameter("remark");
 
+        String[] bs = null;
+        if (birthday != "") {
+            bs = birthday.split("/"); // 按照/将字符串拆分
+            birthday = bs[2] + "-" + bs[0] + "-" + bs[1];
+        }
+
+        HttpSession hs = req.getSession();
+        User user = (User) hs.getAttribute("user");
+
+        if ("农户".equals(user.getAccountType())) {
+            PeasantHouseholdVo phVo = new PeasantHouseholdVo(null, null, null, sex, tel, name, Date.valueOf(birthday), address, remark);
+            PeasantHouseholdService phS = ServiceFactory.getPeasantHouseholdServiceInstance();
+
+            if (phS.updatePeasantHouseholdInfoService(user, phVo)) {
+                try {
+                    req.setAttribute("flag", true);
+
+                    PeasantHouseholdVo tempPh = (PeasantHouseholdVo) hs.getAttribute("info");
+                    tempPh.setName(name);
+                    tempPh.setSex(sex);
+                    tempPh.setBirthday(Date.valueOf(birthday));
+                    tempPh.setTel(tel);
+                    tempPh.setAddress(address);
+                    tempPh.setRemark(remark);
+                    hs.setAttribute("info", tempPh);
+
+                    req.getRequestDispatcher("/user/changeInfo.jsp").forward(req, resp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if ("机手".equals(user.getAccountType())) {
+
+        }
     }
 
     // 注册用户
