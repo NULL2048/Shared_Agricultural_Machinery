@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: 97307
@@ -44,6 +45,14 @@
 
     <span class="systemlogo"></span>
     <br/>
+
+    <c:if test="${sessionScope.reg == 1}">
+        <div style="text-align: center">
+            <span style="font-size: 15px; color: darkred; font-weight: bold">注册成功</span>
+        </div>
+    </c:if>
+    <c:remove var="reg" scope="session"/>
+
     <%
         // 声明Java代码块进行错误提示语逻辑校验
         Object obj = request.getAttribute("flag");

@@ -6,6 +6,7 @@ import team.hau.sam.pojo.vo.PeasantHouseholdVo;
 import team.hau.sam.pojo.vo.User;
 import team.hau.sam.service.LoginService;
 import team.hau.sam.service.PeasantHouseholdService;
+import team.hau.sam.service.SignupService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,8 +21,8 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 设置相应编码格式
-            // 设置请求编码信息
-            // 设置响应编码信息
+        // 设置请求编码信息
+        // 设置响应编码信息
         req.setCharacterEncoding("utf-8"); // 不光要设置respinse的字符集是utf-8,还要设置requst是utf-8，否则控制台日志的汉字就会是乱码
         resp.setContentType("text/html;charset=utf-8");
         // 获取请求信息
@@ -39,8 +40,7 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
             userChangePwd(req, resp);
         } else if ("changeInfo".equals(oper)) {
             userChangeInfo(req, resp);
-        }
-        else {
+        } else {
             logger.warn("没有找到对应的操作符:" + oper);
         }
     }
@@ -58,20 +58,38 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
         String tel = req.getParameter("tel");
         String address = req.getParameter("address");
         String accountType = req.getParameter("accountType");
-        System.out.println(name + " " + password + " " + sex + " " + birthday
-            + " " + tel + " " + address + " " + accountType);
-        System.out.println("农户".equals(accountType));
-
-        String[] bs=null;
-        if(birthday!=""){
-            bs=birthday.split("/");
-            birthday=bs[2]+"-"+bs[0]+"-"+bs[1];
+        // 要将界面传过来的日期格式变成可以被Date类型识别的格式
+        String[] bs = null;
+        if (birthday != "") {
+            bs = birthday.split("/"); // 按照/将字符串拆分
+            birthday = bs[2] + "-" + bs[0] + "-" + bs[1];
         }
-        if ("农户".equals(accountType)) {
-            System.out.println("B");
-            PeasantHouseholdVo phVo = new PeasantHouseholdVo(null, password, accountType, sex, tel, name, Date.valueOf(birthday), address, null);
-            System.out.println("A");
-            logger.debug("获取注册用户信息：" + phVo.toString());
+
+        SignupService suS = ServiceFactory.getSignupServiceInstance();
+
+        try {
+            if ("农户".equals(accountType)) {
+                PeasantHouseholdVo phVo = new PeasantHouseholdVo(null, password, accountType, sex, tel, name, Date.valueOf(birthday), address, null);
+                logger.debug("获取注册用户信息：" + phVo.toString());
+
+                int flag = suS.peasantHouseholdSignupService(phVo);
+                HttpSession hs = req.getSession();
+                if (flag == 1) {
+                    logger.debug("注册成功");
+                    hs.setAttribute("reg", 1);
+                    resp.sendRedirect("/sam/login.jsp");
+                } else if (flag == 0) {
+                    logger.debug("注册失败");
+                    hs.setAttribute("reg", 0);
+                    resp.sendRedirect("/sam/user/signup.jsp");
+                } else if (flag == -1) {
+                    logger.debug("用户已存在");
+                    hs.setAttribute("reg", -1);
+                    resp.sendRedirect("/sam/user/signup.jsp");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -115,6 +133,7 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         }
     }
+
     // 用户退出
     private void out(HttpServletRequest req, HttpServletResponse resp) {
         // 获取session对象
@@ -128,6 +147,7 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
             e.printStackTrace();
         }
     }
+
     // 用户修改密码
     private void userChangePwd(HttpServletRequest req, HttpServletResponse resp) {
         // 获取新密码数据
@@ -147,11 +167,11 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
                     // 重定向到登陆页面
                     resp.sendRedirect("/sam/login.jsp");
                 }
-            } else if("机手".equals(accountType)) {
+            } else if ("机手".equals(accountType)) {
 
-            } else if("农机管理部门".equals(accountType)) {
+            } else if ("农机管理部门".equals(accountType)) {
 
-            } else if("系统管理员".equals(accountType)) {
+            } else if ("系统管理员".equals(accountType)) {
 
             } else {
                 logger.warn("不存在的用户类型：" + accountType);
@@ -163,7 +183,7 @@ public class UserServlet extends javax.servlet.http.HttpServlet {
 
     private void show(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
-        User user = (User)session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
         Object teapUser = null;
 
         if ("农户".equals(user.getAccountType())) {

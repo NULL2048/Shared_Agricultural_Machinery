@@ -26,9 +26,9 @@ public class SignupDaoImpl implements SignupDao {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                flag = true;
-            } else {
                 flag = false;
+            } else {
+                flag = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,10 +57,11 @@ public class SignupDaoImpl implements SignupDao {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, phVo.getAccountType());
             pstmt.setString(2, phVo.getName());
-            pstmt.setString(3, phVo.getTel());
-            pstmt.setDate(4, phVo.getBirthday());
-            pstmt.setString(5, phVo.getAddress());
-            pstmt.setString(6, phVo.getSex());
+            pstmt.setString(3, phVo.getPassword());
+            pstmt.setString(4, phVo.getTel());
+            pstmt.setDate(5, phVo.getBirthday());
+            pstmt.setString(6, phVo.getAddress());
+            pstmt.setString(7, phVo.getSex());
 
             flag = pstmt.executeUpdate();
         } catch (Exception e) {

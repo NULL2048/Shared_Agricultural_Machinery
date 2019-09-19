@@ -13,6 +13,7 @@ public class SignupServiceImpl implements SignupService {
 
     @Override
     public int peasantHouseholdSignupService(PeasantHouseholdVo psVo) {
+        logger.debug("发起注册请求");
         SignupDao suD = DaoFactory.getSignupDaoInstance(dbc.getConnection());
         boolean flag = suD.isPeasantHouseholdExistDao(psVo.getTel());
         if (flag) {

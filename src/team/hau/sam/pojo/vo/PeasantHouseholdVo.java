@@ -14,7 +14,6 @@ public class PeasantHouseholdVo {
     private String remark;
 
     public PeasantHouseholdVo(Integer id, String password, String accountType, String sex, String tel, String name, Date birthday, String address, String remark) {
-        System.out.println("C");
         this.id = id;
         this.password = password;
         this.accountType = accountType;

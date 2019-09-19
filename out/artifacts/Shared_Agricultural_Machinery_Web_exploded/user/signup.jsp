@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: 97307
@@ -25,6 +26,14 @@
 <body>
 <h2>用户注册</h2>
 <p>请在文本框中填写相关信息</p>
+<c:choose>
+    <c:when test="${sessionScope.reg == 0}">
+        <span style="font-size: 15px; color: darkred; font-weight: bold">注册失败</span>
+    </c:when>
+    <c:when test="${sessionScope.reg == -1}">
+        <span style="font-size: 15px; color: darkred; font-weight: bold">用户已存在</span>
+    </c:when>
+</c:choose>
 <div style="margin:20px 0;"></div>
 <div class="easyui-panel" title="用户注册" style="width:600px;padding:10px 60px 20px 60px">
     <form action="user" method="post">
